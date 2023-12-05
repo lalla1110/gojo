@@ -1,0 +1,84 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("/content/student_clustering.csv")
+
+df.head()
+
+plt.scatter(df["cgpa"],df["iq"])
+
+from sklearn.cluster import KMeans
+
+njr = []
+
+for i in range(1,11):
+  km = KMeans(n_clusters = i)
+  km.fit_predict(df)
+  njr.append(km.inertia_)
+
+njr
+
+plt.plot(range(1,11),njr)
+
+x = df.iloc[:,:].values
+
+km = KMeans(n_clusters=4)
+y_means = km.fit_predict(x)
+
+plt.scatter(x[y_means==0,0],x[y_means==0,1],color="blue")
+plt.scatter(x[y_means==1,0],x[y_means==1,1],color="green")
+plt.scatter(x[y_means==2,0],x[y_means==2,1],color="red")
+plt.scatter(x[y_means==3,0],x[y_means==3,1],color="yellow")
+
+explaination:
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read the CSV file ("student_clustering.csv") into a DataFrame
+df = pd.read_csv("/content/student_clustering.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Scatter plot of 'cgpa' vs 'iq'
+plt.scatter(df["cgpa"], df["iq"])
+
+# Import KMeans from sklearn.cluster
+from sklearn.cluster import KMeans
+
+# Initialize an empty list to store the sum of squared distances (inertia) for different values of k
+njr = []
+
+# Loop through k values from 1 to 10 and fit KMeans for each value
+for i in range(1, 11):
+    km = KMeans(n_clusters=i)
+    km.fit_predict(df)
+    njr.append(km.inertia_)
+
+# Plot the Elbow Curve to determine the optimal number of clusters (k)
+plt.plot(range(1, 11), njr)
+
+# Extract features into variable 'x'
+x = df.iloc[:, :].values
+
+# Initialize KMeans with 4 clusters and fit to the data
+km = KMeans(n_clusters=4)
+y_means = km.fit_predict(x)
+
+# Scatter plot the clusters with different colors
+plt.scatter(x[y_means == 0, 0], x[y_means == 0, 1], color="blue")
+plt.scatter(x[y_means == 1, 0], x[y_means == 1, 1], color="green")
+plt.scatter(x[y_means == 2, 0], x[y_means == 2, 1], color="red")
+plt.scatter(x[y_means == 3, 0], x[y_means == 3, 1], color="yellow")
+
+# Add labels and title to the plot
+plt.xlabel("CGPA")
+plt.ylabel("IQ")
+plt.title("K-Means Clustering")
+
+# Show the plot
+plt.show()
+

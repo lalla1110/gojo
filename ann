@@ -1,0 +1,118 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib import pyplot
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import RobustScaler,OneHotEncoder
+from sklearn.metrics import confusion_matrix,precision_score,accuracy_score,recall_score
+
+df = pd.read_csv("Churn_Modelling.csv")
+df.head()
+
+df.shape
+
+
+
+df["Exited"].value_counts()
+
+df.drop(["CustomerId","Surname"],axis=1)
+
+x = df.drop('Exited',axis=1)
+y= df.Exited
+y.value_counts()
+
+x_train,x_test,y_train,y_test =train_test_split(x,y,test_size=0.2,random_state=0)
+
+x.columns
+
+num_cols=['CreditScore','Age', 'Tenure', 'Balance','NumOfProducts',
+'EstimatedSalary']
+cat_cols=['Geography','Gender', 'HasCrCard', 'IsActiveMember']
+
+p=Pipeline(steps=[('ct',ColumnTransformer(transformers=[("s1",RobustScaler(),num_cols),("s2",OneHotEncoder(handle_unknown='ignore'),cat_cols)])),('mod',LogisticRegression(random_state=0))])
+
+p.fit(x_train,y_train)
+
+preds=p.predict(x_test)
+
+print(preds[:15])
+
+print(confusion_matrix(y_test,preds))
+
+
+
+print(confusion_matrix(y_test,preds,labels=(0,1)))
+
+explanation:
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from matplotlib import pyplot
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import RobustScaler, OneHotEncoder
+from sklearn.metrics import confusion_matrix, precision_score, accuracy_score, recall_score
+
+# Read the CSV file ("Churn_Modelling.csv") into a DataFrame
+df = pd.read_csv("Churn_Modelling.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display the shape of the DataFrame (number of rows, number of columns)
+df.shape
+
+# Display the counts of the 'Exited' variable (target variable)
+df["Exited"].value_counts()
+
+# Drop columns "CustomerId" and "Surname" from the DataFrame (This needs to be assigned back to the DataFrame)
+df = df.drop(["CustomerId", "Surname"], axis=1)
+
+# Separate features (x) and target variable (y)
+x = df.drop('Exited', axis=1)
+y = df.Exited
+
+# Display the counts of the target variable
+y.value_counts()
+
+# Split the data into training and testing sets
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+
+# Define numerical and categorical columns
+num_cols = ['CreditScore', 'Age', 'Tenure', 'Balance', 'NumOfProducts', 'EstimatedSalary']
+cat_cols = ['Geography', 'Gender', 'HasCrCard', 'IsActiveMember']
+
+# Create a pipeline for data preprocessing and model building
+p = Pipeline(steps=[
+    ('ct', ColumnTransformer(
+        transformers=[
+            ("s1", RobustScaler(), num_cols),
+            ("s2", OneHotEncoder(handle_unknown='ignore'), cat_cols)
+        ]
+    )),
+    ('mod', LogisticRegression(random_state=0))
+])
+
+# Fit the pipeline on the training data
+p.fit(x_train, y_train)
+
+# Make predictions on the test data
+preds = p.predict(x_test)
+
+# Print the first 15 predictions
+print(preds[:15])
+
+# Display the confusion matrix
+print(confusion_matrix(y_test, preds))
+
+# Display the confusion matrix with specified labels (0, 1)
+print(confusion_matrix(y_test, preds, labels=(0, 1)))
+

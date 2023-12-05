@@ -1,0 +1,53 @@
+# Import necessary libraries
+import pandas as pd
+
+# Read the CSV file into a DataFrame
+df = pd.read_csv("data2.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display the shape of the DataFrame (number of rows, number of columns)
+df.shape
+
+# Extract the independent variable (feature) 'X' and the dependent variable 'y'
+X = df.iloc[:, 1:2].values
+y = df.iloc[:, 2].values
+
+# Import the Linear Regression model from scikit-learn
+from sklearn.linear_model import LinearRegression
+
+# Create a Linear Regression model and fit it to the data
+lr = LinearRegression()
+lr.fit(X, y)
+
+# Import PolynomialFeatures for polynomial regression
+from sklearn.preprocessing import PolynomialFeatures
+
+# Create a PolynomialFeatures object with degree 4
+poly = PolynomialFeatures(degree=4)
+
+# Transform the feature 'X' to include polynomial features up to degree 4
+x_poly = poly.fit_transform(X)
+
+# Fit a linear regression model to the polynomial features
+lr1 = LinearRegression()
+lr1.fit(x_poly, y)
+
+# Plot the original data and linear regression line
+import matplotlib.pyplot as plt
+plt.scatter(X, y, color='blue')
+plt.plot(X, lr.predict(X), color='red')
+plt.title('Linear Regression')
+plt.xlabel('Temperature')
+plt.ylabel('Pressure')
+plt.show()
+
+# Plot the original data and polynomial regression line (degree 4)
+plt.scatter(X, y, color='blue')
+plt.plot(X, lr1.predict(x_poly), color='red')
+plt.title('Polynomial Regression (Degree 4)')
+plt.xlabel('Temperature')
+plt.ylabel('Pressure')
+plt.show()
+

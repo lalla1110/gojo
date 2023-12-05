@@ -1,0 +1,40 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Install the apyori library if not already installed (this should be done separately from the code)
+# pip install apyori
+
+# Import the apriori function from the apyori library
+from apyori import apriori
+
+# Read the CSV file ("Nuclear_accident.csv") into a DataFrame
+df = pd.read_csv("Nuclear_accident.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Display the shape of the DataFrame (number of rows, number of columns)
+df.shape
+
+# Create a list 'records' to store the transactions for apriori algorithm
+records = []
+
+# Loop through the rows of the DataFrame to convert the data into a list of lists
+for i in range(1, 28):
+    # Each transaction is represented as a list of strings (converted from DataFrame values)
+    records.append([str(df.values[i, j]) for j in range(0, 9)])
+
+# Check the type of the 'records' list
+print(type(records))
+
+# Apply the Apriori algorithm to find association rules
+association_rules = apriori(records, min_support=0.0045, min_confidence=0.2, min_lift=3, min_length=2)
+
+# Convert the association rules into a list for further analysis
+association_results = list(association_rules)
+
+# Print the number of derived relations (association rules)
+print("There are {} relations derived.".format(len(association_results)))
+

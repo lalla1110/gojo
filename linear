@@ -1,0 +1,77 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("/content/placement(1).csv")
+df.head()
+
+x=df.iloc[:,0:1]
+
+y=df.iloc[:,-1]
+
+from sklearn.model_selection import train_test_split
+
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.25,random_state=0)
+
+x_train
+
+from sklearn.linear_model import LinearRegression
+lr=LinearRegression()
+
+lr.fit(x_train,y_train)
+
+lr.predict(x_test.iloc[0].values.reshape(1,1))
+plt.scatter(df["cgpa"],df["package"])
+plt.plot(x_train,lr.predict(x_train),color="red")
+
+explanation:
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read the CSV file ("/content/placement(1).csv") into a DataFrame
+df = pd.read_csv("/content/placement(1).csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Select the feature 'cgpa' as the independent variable (x)
+x = df.iloc[:, 0:1]
+
+# Select the target variable 'package' as the dependent variable (y)
+y = df.iloc[:, -1]
+
+# Split the data into training and testing sets
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25, random_state=0)
+
+# Display the training set
+x_train
+
+# Import the Linear Regression model from scikit-learn
+from sklearn.linear_model import LinearRegression
+
+# Create a Linear Regression model
+lr = LinearRegression()
+
+# Fit the Linear Regression model to the training data
+lr.fit(x_train, y_train)
+
+# Predict the target variable for a single data point in the test set
+prediction = lr.predict(x_test.iloc[0].values.reshape(1, 1))
+
+# Scatter plot of 'cgpa' vs 'package'
+plt.scatter(df["cgpa"], df["package"])
+
+# Plot the regression line
+plt.plot(x_train, lr.predict(x_train), color="red")
+
+# Add labels and title to the plot
+plt.xlabel("CGPA")
+plt.ylabel("Package")
+plt.title("Linear Regression: CGPA vs Package")
+
+# Show the plot
+plt.show()
+

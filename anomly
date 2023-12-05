@@ -1,0 +1,40 @@
+# Import necessary libraries
+import numpy as np
+import pandas as pd
+from sklearn.ensemble import IsolationForest
+
+# Read the CSV file into a DataFrame
+df = pd.read_csv("cricket scoredataset.csv")
+
+# Display the entire DataFrame
+df
+
+# Create an Isolation Forest model with specified parameters
+model = IsolationForest(n_estimators=1000, max_samples='auto', contamination=float(0.2))
+
+# Fit the model on the 'Score' column of the DataFrame
+model.fit(df[['Score']])
+
+# Identify outliers based on a threshold (36 in this case) and count them
+outliers_counter = (df[df['Score'] > 36])
+outliers_counter
+
+# Import matplotlib for visualization
+import matplotlib.pyplot as plt
+
+# Scatter plot of 'Overs' against 'Score'
+plt.scatter(df['Overs'], df['Score'])
+plt.xlabel('Overs')
+plt.ylabel('Score')
+plt.title('Scatter Plot of Overs vs Score')
+plt.show()
+
+# Create a new column 'anomaly_scores' to store the anomaly scores calculated by the Isolation Forest model
+df['anomaly_scores'] = model.decision_function(df[['Score']])
+
+# Create a new column 'anomaly' to store the predicted labels (1 for inliers, -1 for outliers) by the Isolation Forest model
+df['anomaly'] = model.predict(df[['Score']])
+
+# Display the first 20 rows of the DataFrame with the new anomaly-related columns
+df.head(20)
+

@@ -1,0 +1,80 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("/content/iris_csv.csv")
+df.head()
+
+x = df.iloc[:,:-1]
+
+y = df.iloc[:,4]
+
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test = train_test_split(x,y,test_size=0.2,random_state=0)
+
+from sklearn.preprocessing import StandardScaler
+
+sc = StandardScaler()
+
+x_train = sc.fit_transform(x_train)
+x_test = sc.fit_transform(x_test)
+
+sc.fit(x_train)
+
+from sklearn.neighbors import KNeighborsClassifier
+
+cs = KNeighborsClassifier(n_neighbors = 3)
+cs.fit(x_train,y_train)
+
+y_pred = cs.predict(x_test)
+
+from sklearn.metrics import classification_report,confusion_matrix
+
+print(classification_report(y_test,y_pred))
+
+print(confusion_matrix(y_test,y_pred))
+
+explanation:
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Read the CSV file ("iris_csv.csv") into a DataFrame
+df = pd.read_csv("/content/iris_csv.csv")
+
+# Display the first few rows of the DataFrame
+df.head()
+
+# Separate features (x) and target variable (y)
+x = df.iloc[:, :-1]  # Features
+y = df.iloc[:, 4]     # Target variable
+
+# Split the data into training and testing sets
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=0)
+
+# Standardize the features using StandardScaler
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+
+# Fit and transform the training data
+x_train = sc.fit_transform(x_train)
+
+# Transform the test data using the same scaler
+x_test = sc.transform(x_test)
+
+# Initialize and fit the KNN classifier with 3 neighbors
+from sklearn.neighbors import KNeighborsClassifier
+cs = KNeighborsClassifier(n_neighbors=3)
+cs.fit(x_train, y_train)
+
+# Predict the target variable for the test set
+y_pred = cs.predict(x_test)
+
+# Evaluate the classifier using classification report and confusion matrix
+from sklearn.metrics import classification_report, confusion_matrix
+print("Classification Report:\n", classification_report(y_test, y_pred))
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+
+
